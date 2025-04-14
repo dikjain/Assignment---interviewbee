@@ -48,7 +48,10 @@ export default function MeetCards({ meetings }) {
         return (
           <div key={meeting.eventId} className="flex items-center justify-between p-3 border rounded-lg">
             <div className="space-y-1">
-              <div className="font-medium">{meeting.summary}</div>
+              <div className="text-sm font-medium">{meeting.summary}</div>
+              {meeting.description && (
+                <div className="text-xs text-muted-foreground">{meeting.description}</div>
+              )}
               <div className="text-sm text-muted-foreground">
                 {startDate.toLocaleDateString()} at {startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </div>
