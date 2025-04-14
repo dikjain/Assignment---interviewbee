@@ -26,11 +26,11 @@ export async function POST(request) {
       description,
       start: {
         dateTime: startDateTime,
-        timeZone: 'America/Los_Angeles',
+        timeZone: 'Asia/Kolkata',
       },
       end: {
         dateTime: endDateTime,
-        timeZone: 'America/Los_Angeles',
+        timeZone: 'Asia/Kolkata',
       },
       conferenceData: {
         createRequest: {
