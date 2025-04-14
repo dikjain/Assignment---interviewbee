@@ -59,7 +59,7 @@ function Home() {
             
             <button 
               onClick={() => signIn('google')}
-              className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-200 shadow-sm"
+              className="w-full flex items-center justify-center cursor-pointer gap-3 py-3 px-4 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-200 shadow-sm"
             >
               {/* Google icon SVG */}
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px">
