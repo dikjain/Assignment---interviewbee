@@ -4,13 +4,24 @@ import { useState } from "react";
 import { CalendarIcon, Clock } from "lucide-react";
 import { useSession } from "next-auth/react";
 
-
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function ScheduleMeeting({ onSchedule, isLoading }) {
   const { data: session } = useSession();
@@ -25,26 +36,57 @@ export default function ScheduleMeeting({ onSchedule, isLoading }) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
+  // const handleScheduleMeeting = () => {
+
+  //   if (!date || !session) return;
+
+  //   // Parse meeting time and create event datetime objects
+  //   const eventDateTime = new Date(date);
+  //   const [hours, minutes] = time.split(':');
+  //   eventDateTime.setHours(parseInt(hours, 10), parseInt(minutes, 10));
+
+  //   // Calculate end time based on selected duration
+  //   const endDateTime = new Date(eventDateTime);
+  //   const durationInMinutes = duration === "custom"
+  //     ? parseInt(customDuration, 10)
+  //     : parseInt(duration, 10);
+
+  //   endDateTime.setMinutes(endDateTime.getMinutes() + durationInMinutes);
+
+  //   // Submit meeting details to parent component
+  //   onSchedule({
+  //     summary: meetingTitle || 'Scheduled Meeting',
+  //     description: meetingDescription || 'Meeting created via Meeting Scheduler',
+  //     startDateTime: eventDateTime.toISOString(),
+  //     endDateTime: endDateTime.toISOString(),
+  //   });
+  // };
+
   const handleScheduleMeeting = () => {
     if (!date || !session) return;
-    
-    // Parse meeting time and create event datetime objects
+
     const eventDateTime = new Date(date);
-    const [hours, minutes] = time.split(':');
-    eventDateTime.setHours(parseInt(hours, 10), parseInt(minutes, 10));
-    
-    // Calculate end time based on selected duration
+    const [hours, minutes] = time.split(":");
+    eventDateTime.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+
+    const now = new Date();
+    if (eventDateTime < now) {
+      alert("Please select a future date and time.");
+      return;
+    }
+
+    const durationInMinutes =
+      duration === "custom"
+        ? parseInt(customDuration, 10)
+        : parseInt(duration, 10);
+
     const endDateTime = new Date(eventDateTime);
-    const durationInMinutes = duration === "custom" 
-      ? parseInt(customDuration, 10) 
-      : parseInt(duration, 10);
-    
     endDateTime.setMinutes(endDateTime.getMinutes() + durationInMinutes);
-    
-    // Submit meeting details to parent component
+
     onSchedule({
-      summary: meetingTitle || 'Scheduled Meeting',
-      description: meetingDescription || 'Meeting created via Meeting Scheduler',
+      summary: meetingTitle || "Scheduled Meeting",
+      description:
+        meetingDescription || "Meeting created via Meeting Scheduler",
       startDateTime: eventDateTime.toISOString(),
       endDateTime: endDateTime.toISOString(),
     });
@@ -57,9 +99,7 @@ export default function ScheduleMeeting({ onSchedule, isLoading }) {
           <CalendarIcon className="w-5 h-5" />
           Schedule Meeting
         </CardTitle>
-        <CardDescription>
-          Plan a Google Meet for later
-        </CardDescription>
+        <CardDescription>Plan a Google Meet for later</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
@@ -107,8 +147,8 @@ export default function ScheduleMeeting({ onSchedule, isLoading }) {
         </div>
         <div className="space-y-2">
           <Label>Duration</Label>
-          <Select 
-            value={duration} 
+          <Select
+            value={duration}
             onValueChange={(value) => setDuration(value)}
             disabled={!session}
           >
@@ -123,7 +163,7 @@ export default function ScheduleMeeting({ onSchedule, isLoading }) {
               <SelectItem value="custom">Custom</SelectItem>
             </SelectContent>
           </Select>
-          
+
           {duration === "custom" && (
             <div className="mt-2">
               <Input
@@ -138,8 +178,8 @@ export default function ScheduleMeeting({ onSchedule, isLoading }) {
             </div>
           )}
         </div>
-        <Button 
-          className="w-full" 
+        <Button
+          className="w-full"
           onClick={handleScheduleMeeting}
           disabled={isLoading || !session}
         >
