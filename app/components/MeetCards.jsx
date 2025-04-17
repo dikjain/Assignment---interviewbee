@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import { Check, X, Link as LinkIcon } from 'lucide-react';
+import { Check, X, Link as LinkIcon, ExternalLink } from 'lucide-react';
 import useMeetStore from '@/app/store/store';
-
-
 import { Button } from '@/components/ui/button';
 
 /**
  * MeetCards component displays a list of scheduled meetings
- * with options to copy meeting links and mark meetings as completed
+ * with options to copy meeting links, open them, and mark meetings as completed
  */
 export default function MeetCards({ meetings }) {
   const { updateMeetingStatus } = useMeetStore();
@@ -22,9 +20,9 @@ export default function MeetCards({ meetings }) {
   const handleCopyLink = (meetLink, eventId) => {
     navigator.clipboard.writeText(meetLink);
     setCopyStatus({ ...copyStatus, [eventId]: true });
-    
+
     setTimeout(() => {
-      setCopyStatus({ ...copyStatus, [eventId]: false });
+      setCopyStatus((prev) => ({ ...prev, [eventId]: false }));
     }, 2000);
   };
 
@@ -44,22 +42,33 @@ export default function MeetCards({ meetings }) {
         const endDate = new Date(meeting.endDateTime);
         const duration = endDate.getTime() - startDate.getTime();
         const durationInMinutes = Math.round(duration / (1000 * 60));
-        
+
         return (
-          <div key={meeting.eventId} className="flex items-center justify-between p-3 border rounded-lg">
+          <div
+            key={meeting.eventId}
+            className="flex items-center justify-between p-3 border rounded-lg"
+          >
             <div className="space-y-1">
               <div className="text-sm font-medium">{meeting.summary}</div>
               {meeting.description && (
-                <div className="text-xs text-muted-foreground">{meeting.description}</div>
+                <div className="text-xs text-muted-foreground">
+                  {meeting.description}
+                </div>
               )}
               <div className="text-sm text-muted-foreground">
-                {startDate.toLocaleDateString()} at {startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                {startDate.toLocaleDateString()} at{" "}
+                {startDate.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </div>
               <div className="text-xs text-muted-foreground">
                 Duration: {durationInMinutes} minutes
               </div>
             </div>
-            <div className="flex items-center gap-2">
+
+            <div className="flex items-center gap-2 flex-wrap justify-end">
+              {/* Copy Link */}
               <Button
                 size="sm"
                 variant="outline"
@@ -69,11 +78,33 @@ export default function MeetCards({ meetings }) {
                 <LinkIcon className="w-4 h-4 mr-1" />
                 {copyStatus[meeting.eventId] ? "Copied!" : "Copy"}
               </Button>
+
+              {/* Open Link */}
+              <a
+                href={meeting.meetLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="cursor-pointer"
+                >
+                  <ExternalLink className="w-4 h-4 mr-1" />
+                  Open
+                </Button>
+              </a>
+
+              {/* Toggle Done/Undo */}
               <Button
                 size="sm"
                 variant={meeting.isCompleted ? "destructive" : "success"}
-                className={`cursor-pointer ${!meeting.isCompleted ? "hover:bg-gray-300" : ""}`}
-                onClick={() => handleToggleCompletion(meeting.eventId, meeting.isCompleted)}
+                className={`cursor-pointer ${
+                  !meeting.isCompleted ? "hover:bg-gray-300" : ""
+                }`}
+                onClick={() =>
+                  handleToggleCompletion(meeting.eventId, meeting.isCompleted)
+                }
               >
                 {meeting.isCompleted ? (
                   <>

@@ -174,32 +174,6 @@ export default function Home() {
             </CardContent>
           </Card>
         </div>
-
-        {/* Meeting Link */}
-        {meetingLink && (
-          <Card className="border-primary/50">
-            <CardHeader className="pb-2">
-              <CardTitle>Your Google Meet Link</CardTitle>
-              <CardDescription>
-                Share this link with your participants
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-2">
-                <Input readOnly value={meetingLink} className="font-mono" />
-                <Button
-                  className="cursor-pointer"
-                  variant="secondary"
-                  onClick={() => {
-                    navigator.clipboard.writeText(meetingLink);
-                  }}
-                >
-                  Copy
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
       </div>
     </main>
   );
