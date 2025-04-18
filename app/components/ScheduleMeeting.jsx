@@ -32,14 +32,14 @@ export default function ScheduleMeeting({ onSchedule, isLoading }) {
   const [meetingTitle, setMeetingTitle] = useState("");
   const [meetingDescription, setMeetingDescription] = useState("");
 
-  const [today, setToday] = useState(new Date()); // State to store the "today" date
+  const [today, setToday] = useState(new Date());
 
-  // This effect runs once when the component mounts and ensures the "today" is updated correctly.
+  
   useEffect(() => {
     const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0); // Set time to midnight
+    currentDate.setHours(0, 0, 0, 0); 
     setToday(currentDate);
-  }, []); // Run only once on mount
+  }, []);
 
   const handleScheduleMeeting = () => {
     if (!date || !session) return;
