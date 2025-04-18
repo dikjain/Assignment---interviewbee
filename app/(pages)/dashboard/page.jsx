@@ -176,7 +176,7 @@ export default function Home() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="h-full overflow-y-auto pr-2">
+              <div className="max-h-full overflow-y-auto pr-2">
                 <MeetCards meetings={meetings} />
               </div>
             </CardContent>
