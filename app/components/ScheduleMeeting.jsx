@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CalendarIcon, Clock } from "lucide-react";
 import { useSession } from "next-auth/react";
 
@@ -32,35 +32,14 @@ export default function ScheduleMeeting({ onSchedule, isLoading }) {
   const [meetingTitle, setMeetingTitle] = useState("");
   const [meetingDescription, setMeetingDescription] = useState("");
 
-  // Set minimum date to today to prevent scheduling in the past
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const [today, setToday] = useState(new Date()); // State to store the "today" date
 
-  // const handleScheduleMeeting = () => {
-
-  //   if (!date || !session) return;
-
-  //   // Parse meeting time and create event datetime objects
-  //   const eventDateTime = new Date(date);
-  //   const [hours, minutes] = time.split(':');
-  //   eventDateTime.setHours(parseInt(hours, 10), parseInt(minutes, 10));
-
-  //   // Calculate end time based on selected duration
-  //   const endDateTime = new Date(eventDateTime);
-  //   const durationInMinutes = duration === "custom"
-  //     ? parseInt(customDuration, 10)
-  //     : parseInt(duration, 10);
-
-  //   endDateTime.setMinutes(endDateTime.getMinutes() + durationInMinutes);
-
-  //   // Submit meeting details to parent component
-  //   onSchedule({
-  //     summary: meetingTitle || 'Scheduled Meeting',
-  //     description: meetingDescription || 'Meeting created via Meeting Scheduler',
-  //     startDateTime: eventDateTime.toISOString(),
-  //     endDateTime: endDateTime.toISOString(),
-  //   });
-  // };
+  // This effect runs once when the component mounts and ensures the "today" is updated correctly.
+  useEffect(() => {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0); // Set time to midnight
+    setToday(currentDate);
+  }, []); // Run only once on mount
 
   const handleScheduleMeeting = () => {
     if (!date || !session) return;
@@ -130,7 +109,7 @@ export default function ScheduleMeeting({ onSchedule, isLoading }) {
             onSelect={setDate}
             className="rounded-md border w-fit self-center"
             disabled={!session}
-            fromDate={today}
+            fromDate={today} {/* Uses the correct "today" date */}
           />
         </div>
         <div className="space-y-2">
