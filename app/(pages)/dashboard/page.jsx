@@ -165,7 +165,7 @@ export default function Home() {
           </div>
 
           {/* Meetings List */}
-          <Card className="h-full relative">
+          <Card className="h-fit relative">
             <div className="absolute top-3 right-3 bg-black text-white px-4 py-2 rounded-full">
               {meetings.filter((meeting) => !meeting.isCompleted).length}
             </div>
