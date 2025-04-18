@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { google } from "googleapis";
 
+/**
+ * API route that creates a Google Meet link by creating a Calendar event,
+ * then deletes the event instantly (user won't see it in Calendar)
+ */
 export async function POST(request) {
   try {
     const { summary, description, startDateTime, endDateTime, accessToken } =

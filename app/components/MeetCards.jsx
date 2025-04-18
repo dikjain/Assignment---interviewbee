@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Check, X, Link as LinkIcon, ExternalLink } from 'lucide-react';
-import useMeetStore from '@/app/store/store';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { Check, X, Link as LinkIcon, ExternalLink } from "lucide-react";
+import useMeetStore from "@/app/store/store";
+import { Button } from "@/components/ui/button";
 
 /**
  * MeetCards component displays a list of scheduled meetings
@@ -36,7 +36,7 @@ export default function MeetCards({ meetings }) {
   }
 
   return (
-    <div className="space-y-3 relative">
+    <div className="space-y-3 h-full relative">
       {meetings.map((meeting) => {
         const startDate = new Date(meeting.startDateTime);
         const endDate = new Date(meeting.endDateTime);
@@ -73,7 +73,9 @@ export default function MeetCards({ meetings }) {
                 size="sm"
                 variant="outline"
                 className="cursor-pointer"
-                onClick={() => handleCopyLink(meeting.meetLink, meeting.eventId)}
+                onClick={() =>
+                  handleCopyLink(meeting.meetLink, meeting.eventId)
+                }
               >
                 <LinkIcon className="w-4 h-4 mr-1" />
                 {copyStatus[meeting.eventId] ? "Copied!" : "Copy"}

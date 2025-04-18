@@ -33,7 +33,10 @@ export default function Home() {
 
     try {
       if (isInstant) {
-        // 👇 Replace this block with:
+        const now = new Date();
+        const end = new Date(now);
+        end.setMinutes(now.getMinutes() + 60);
+
         const response = await fetch("/api/instantmeet", {
           method: "POST",
           headers: {
@@ -42,6 +45,8 @@ export default function Home() {
           body: JSON.stringify({
             summary: "Instant Meeting",
             description: "Meeting created via Meeting Scheduler",
+            startDateTime: now.toISOString(),
+            endDateTime: end.toISOString(),
             accessToken: session.accessToken,
           }),
         });
@@ -49,10 +54,6 @@ export default function Home() {
         const data = await response.json();
 
         if (data.success) {
-          const now = new Date();
-          const end = new Date(now);
-          end.setMinutes(now.getMinutes() + 60);
-
           setMeetingLink(data.meetLink);
 
           addMeeting({
