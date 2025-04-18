@@ -33,35 +33,42 @@ export default function Home() {
 
     try {
       if (isInstant) {
-        // Generate a dummy Meet link (you can replace with actual logic)
-        const dummyLink =
-          "https://meet.google.com/" +
-          Math.random().toString(36).substring(2, 9);
-
-        const eventDateTime = new Date();
-        const endDateTime = new Date(eventDateTime);
-        endDateTime.setMinutes(eventDateTime.getMinutes() + 60);
-
-        const eventData = {
-          summary: "Instant Meeting",
-          description: "Meeting created via Meeting Scheduler",
-          startDateTime: eventDateTime.toISOString(),
-          endDateTime: endDateTime.toISOString(),
-        };
-
-        setMeetingLink(dummyLink);
-
-        addMeeting({
-          eventId: dummyLink,
-          title: eventData.summary,
-          description: eventData.description,
-          startDateTime: eventData.startDateTime,
-          endDateTime: eventData.endDateTime,
-          meetLink: dummyLink,
-          isCompleted: false,
+        // 👇 Replace this block with:
+        const response = await fetch("/api/instantmeet", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            summary: "Instant Meeting",
+            description: "Meeting created via Meeting Scheduler",
+            accessToken: session.accessToken,
+          }),
         });
 
-        return; // Skip API
+        const data = await response.json();
+
+        if (data.success) {
+          const now = new Date();
+          const end = new Date(now);
+          end.setMinutes(now.getMinutes() + 60);
+
+          setMeetingLink(data.meetLink);
+
+          addMeeting({
+            eventId: data.eventId,
+            title: "Instant Meeting",
+            description: "Meeting created via Meeting Scheduler",
+            startDateTime: now.toISOString(),
+            endDateTime: end.toISOString(),
+            meetLink: data.meetLink,
+            isCompleted: false,
+          });
+        } else {
+          console.error("Error creating instant meeting:", data.error);
+        }
+
+        return;
       }
 
       // Scheduled meeting: Call your API
