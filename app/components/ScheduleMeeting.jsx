@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { CalendarIcon, Clock } from "lucide-react";
 import { useSession } from "next-auth/react";
 
@@ -32,14 +32,9 @@ export default function ScheduleMeeting({ onSchedule, isLoading }) {
   const [meetingTitle, setMeetingTitle] = useState("");
   const [meetingDescription, setMeetingDescription] = useState("");
 
-  const [today, setToday] = useState(new Date());
-
-  
-  useEffect(() => {
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0); 
-    setToday(currentDate);
-  }, []);
+  // Set minimum date to today to prevent scheduling in the past
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const handleScheduleMeeting = () => {
     if (!date || !session) return;
@@ -109,7 +104,7 @@ export default function ScheduleMeeting({ onSchedule, isLoading }) {
             onSelect={setDate}
             className="rounded-md border w-fit self-center"
             disabled={!session}
-            fromDate={today} {/* Uses the correct "today" date */}
+            fromDate={today}
           />
         </div>
         <div className="space-y-2">
